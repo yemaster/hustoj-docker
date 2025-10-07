@@ -1,0 +1,7 @@
+data/
+hustoj/
+web/src/
+judger/src/
+judger/etc/
+.env
+db.sql

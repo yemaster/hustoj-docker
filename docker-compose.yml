@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  web:
+    image: yemaster/hustoj-web
+    container_name: web_app
+    restart: always
+    environment:
+      DB_HOST: mysql_db
+      DB_USER: root
+      DB_PASS: ${MYSQL_ROOT_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE:-jol}
+
+      HUSTOJ_NAME: ${HUSTOJ_NAME:-DockerHustoj}
+      HUSTOJ_THEME: ${HUSTOJ_THEME:-syzoj}
+    ports:
+      - "${WEB_PORT-80}:80"
+    volumes:
+      - ./data/web:/var/www/html
+      - ./data/judger:/var/www/judger
+    # depends_on:
+    #   mysql:
+    #     condition: service_healthy
+    networks:
+      - hustoj_network
+  
+  mysql:
+    image: mariadb:11.8
+    container_name: mysql_db
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./data/mysql:/var/lib/mysql:Z
+      - ./db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - hustoj_network
+    # healthcheck:
+    #   test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+
+  judger:
+    image: yemaster/hustoj-judger
+    container_name: judger
+    restart: always
+    environment:
+      DB_HOST: mysql_db
+      DB_USER: root
+      DB_PASS: ${MYSQL_ROOT_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE:-jol}
+
+      JUDGER_DATA_PATH: ${PWD}/data/judger
+      JUDGER_NETWORK: hustoj_network
+
+      INSTALL: 1
+    volumes:
+      - ./data/judger:/home/judge
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - hustoj_network
+
+networks:
+  hustoj_network:
+    name: ${NETWORK_NAME:-hustoj_network}
+    driver: bridge
