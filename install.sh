@@ -102,6 +102,7 @@ if [ ! -d "./hustoj-docker" ]; then
     for i in {1..3}; do
         git clone https://gh-proxy.com/https://github.com/yemaster/hustoj-docker
         if [ $? -eq 0 ]; then
+            GITHUB_PROXY=https://gh-proxy.com/
             break
         else
             echo "克隆失败，正在重试... ($i/3)"
@@ -132,4 +133,4 @@ sed -i "s|^HUSTOJ_NAME=.*|HUSTOJ_NAME=$HUSTOJ_NAME|" .env
 sed -i "s|^MYSQL_ROOT_PASSWORD=.*|MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD|" .env
 
 chmod +x ./start.sh
-./start.sh
+GITHUB_PROXY=${GITHUB_PROXY:-""} ./start.sh

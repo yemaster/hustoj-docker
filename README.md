@@ -20,7 +20,8 @@
 ```bash
 # Github
 bash <(curl -sSL https://raw.githubusercontent.com/yemaster/hustoj-docker/refs/heads/master/install.sh)
-# Github 镜像
+
+# Github 镜像（网络不好可以选择）
 bash <(curl -sSL https://gh-proxy.com/https://raw.githubusercontent.com/yemaster/hustoj-docker/refs/heads/master/install.sh)
 ```
 
@@ -91,9 +92,9 @@ docker compose up -d
 
 所有数据存储在 ./data 目录下，包含以下子目录：
 
-- ./data/web：Web 服务代码和配置文件
-- ./data/mysql：MySQL 数据库数据
-- ./data/judger：判题机相关数据
+- `./data/web`：Web 服务代码和配置文件
+- `./data/mysql`：MySQL 数据库数据
+- `./data/judger`：判题机相关数据
 
 **迁移项目**：
 
@@ -104,4 +105,27 @@ docker compose up -d
 ## 常见问题
 
 1. **如何自定义 HUSTOJ 配置？**
+
    - 修改 ./data/web 目录下的配置文件，具体参考 [HUSTOJ 官方文档](https://github.com/zhblue/hustoj)。
+
+2. **如何进入数据库？**
+
+   - 执行如下语句，然后输入 `.env` 中指定的数据库密码即可：
+
+     ```bash
+     docker exec -it hustoj_db mariadb -u root -p
+     ```
+
+     进入数据库之后，选择 `jol` 数据库
+
+     ```bash
+     use jol;
+     ```
+
+3. **怎么样让我的账号变成管理员账号？**
+
+   - 按照 2 进入数据库，然后执行如下 SQL 语句：
+
+     ```sql
+     INSERT INTO privilege values("你的用户名", 'administrator', 'true', 'N');
+     ```

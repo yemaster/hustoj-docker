@@ -5,7 +5,7 @@ services:
     build:
       context: ./web
     image: ${WEB_IMAGE:-yemaster/hustoj-web}
-    container_name: web_app
+    container_name: hustoj_web
     restart: always
     environment:
       DB_HOST: mysql_db
@@ -28,7 +28,7 @@ services:
   
   mysql:
     image: mariadb:11.8
-    container_name: mysql_db
+    container_name: hustoj_db
     restart: always
     environment:
       MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -47,7 +47,7 @@ services:
     build:
       context: ./judger
     image: ${JUDGER_IMAGE:-yemaster/hustoj-judger}
-    container_name: judger
+    container_name: hustoj_judger
     restart: always
     environment:
       DB_HOST: mysql_db
