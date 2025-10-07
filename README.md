@@ -13,15 +13,20 @@
 - 数据持久化存储，方便备份与迁移
 - 支持通过 Docker Hub 或国内镜像加速部署
 
-## 前置条件
-
-- 安装 [Docker](https://docs.docker.com/get-docker/) 和 [Docker Compose](https://docs.docker.com/compose/install/)
-- 确保系统支持 Docker（推荐 Ubuntu/Debian 或其他 Linux 发行版）
-- 稳定的网络连接（若使用国内网络，建议配置镜像加速）
-
 ## 安装与使用
 
-### 1. 安装 Docker
+### 一键安装，适合新手
+
+```bash
+# Github
+bash <(curl -sSL https://raw.githubusercontent.com/yemaster/hustoj-docker/refs/heads/master/install.sh)
+# Github 镜像
+bash <(curl -sSL https://gh-proxy.com/https://raw.githubusercontent.com/yemaster/hustoj-docker/refs/heads/master/install.sh)
+```
+
+### 逐步安装
+
+#### 1. 安装 Docker
 
 在 Linux 系统上安装 Docker 和 Docker Compose：
 
@@ -33,9 +38,9 @@ sudo systemctl start docker
 sudo systemctl enable docker
 ```
 
-宝塔面板用户：在宝塔面板中直接搜索并安装 Docker 管理插件即可。
+宝塔面板用户：在宝塔面板的 Docker 页面直接安装 Docker 即可。
 
-### 2. 克隆项目并配置环境
+#### 2. 克隆项目并配置环境
 
 克隆本项目并准备配置文件：
 
@@ -50,10 +55,10 @@ cp .env.example .env
 
 编辑 .env 文件，根据需求修改以下配置项：
 
-- WEB_PORT：HUSTOJ 的 Web 服务端口，例如 8080。若使用反向代理（如 Nginx），可设置为内网地址，如 127.0.0.1:8080。
-- HUSTOJ_NAME：在线评测系统的名称，例如 My Online Judge。
-- HUSTOJ_THEME：HUSTOJ 的主题，可选值参考 HUSTOJ 官方文档（默认：default）。
-- MYSQL_ROOT_PASSWORD：MySQL 数据库 root 用户密码，建议使用随机生成的强密码（至少 12 位，包含字母、数字和符号）。
+- `WEB_PORT`：HUSTOJ 的 Web 服务端口，例如 8080。若使用反向代理（如 Nginx），可设置为内网地址，如 127.0.0.1:8080。
+- `HUSTOJ_NAME`：在线评测系统的名称，例如 HUSTOJ，避免使用中文和空格。
+- `HUSTOJ_THEME`：HUSTOJ 的主题，可选值参考 HUSTOJ 官方文档（默认：`syzoj`）。
+- `MYSQL_ROOT_PASSWORD`：MySQL 数据库 root 用户密码，建议使用随机生成的强密码（至少 12 位，包含字母、数字和符号）。
 
 **国内用户注意**：如果无法访问 Docker Hub，可将镜像地址替换为国内镜像源，例如：
 
@@ -62,7 +67,7 @@ WEB_IMAGE=registry.abstrax.cn/yemaster/hustoj-web
 JUDGER_IMAGE=registry.abstrax.cn/yemaster/hustoj-judger
 ```
 
-### 3. 启动项目
+#### 3. 启动项目
 
 执行以下命令启动 HUSTOJ：
 
