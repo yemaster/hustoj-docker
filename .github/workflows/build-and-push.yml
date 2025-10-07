@@ -1,0 +1,67 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+
+      - name: Check for hustoj repository updates
+        id: check-hustoj
+        run: |
+          LATEST_COMMIT=$(curl -s https://api.github.com/repos/zhblue/hustoj/commits/master | jq -r '.sha')
+          echo "Latest hustoj commit: $LATEST_COMMIT"
+          echo "LATEST_COMMIT=$LATEST_COMMIT" >> $GITHUB_ENV
+          # Optionally, store the last checked commit in a file or secret to compare for changes
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to registry.abstrax.cn
+        uses: docker/login-action@v3
+        with:
+          registry: registry.abstrax.cn
+          username: ${{ secrets.ABSTRAX_USERNAME }}
+          password: ${{ secrets.ABSTRAX_TOKEN }}
+
+      - name: Make build.sh executable
+        run: chmod +x build.sh
+
+      - name: Run build.sh
+        run: ./build.sh
+
+      - name: Tag and push images with date and latest tags
+        run: |
+          DATE_TAG=$(date +%Y%m%d)
+          echo "Tagging images with $DATE_TAG"
+          
+          # Tag and push hustoj-web
+          docker tag yemaster/hustoj-web yemaster/hustoj-web:$DATE_TAG
+          docker tag yemaster/hustoj-web registry.abstrax.cn/yemaster/hustoj-web:$DATE_TAG
+          docker push yemaster/hustoj-web:latest
+          docker push yemaster/hustoj-web:$DATE_TAG
+          docker push registry.abstrax.cn/yemaster/hustoj-web:latest
+          docker push registry.abstrax.cn/yemaster/hustoj-web:$DATE_TAG
+          
+          # Tag and push hustoj-judger
+          docker tag yemaster/hustoj-judger yemaster/hustoj-judger:$DATE_TAG
+          docker tag yemaster/hustoj-judger registry.abstrax.cn/yemaster/hustoj-judger:$DATE_TAG
+          docker push yemaster/hustoj-judger:latest
+          docker push yemaster/hustoj-judger:$DATE_TAG
+          docker push registry.abstrax.cn/yemaster/hustoj-judger:latest
+          docker push registry.abstrax.cn/yemaster/hustoj-judger:$DATE_TAG
