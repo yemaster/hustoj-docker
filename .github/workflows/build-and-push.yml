@@ -52,6 +52,7 @@ jobs:
           
           # Tag and push hustoj-web
           docker tag yemaster/hustoj-web yemaster/hustoj-web:$DATE_TAG
+          docker tag yemaster/hustoj-web registry.abstrax.cn/yemaster/hustoj-web:latest
           docker tag yemaster/hustoj-web registry.abstrax.cn/yemaster/hustoj-web:$DATE_TAG
           docker push yemaster/hustoj-web:latest
           docker push yemaster/hustoj-web:$DATE_TAG
@@ -60,6 +61,7 @@ jobs:
           
           # Tag and push hustoj-judger
           docker tag yemaster/hustoj-judger yemaster/hustoj-judger:$DATE_TAG
+          docker tag yemaster/hustoj-judger registry.abstrax.cn/yemaster/hustoj-judger:latest
           docker tag yemaster/hustoj-judger registry.abstrax.cn/yemaster/hustoj-judger:$DATE_TAG
           docker push yemaster/hustoj-judger:latest
           docker push yemaster/hustoj-judger:$DATE_TAG
