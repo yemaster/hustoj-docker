@@ -42,7 +42,7 @@ if [ -z "$HAS_DOCKER" ] || [ -z "$HAS_DOCKER_COMPOSE" ]; then
     fi
 fi
 
-AVAILABLE_DOCKER_REGISTRY=("hub.docker.com", "registry.abstrax.cn", "docker.1ms.run")
+AVAILABLE_DOCKER_REGISTRY=("hub.docker.com", "docker.1ms.run")
 LOWEST_LATENCY=1000000
 BEST_REGISTRY="docker.1ms.run"
 for REGISTRY in "${AVAILABLE_DOCKER_REGISTRY[@]}"; do

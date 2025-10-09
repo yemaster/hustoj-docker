@@ -64,27 +64,4 @@ jobs:
           docker tag yemaster/hustoj-judger yemaster/hustoj-judger:$DATE_TAG
           docker push yemaster/hustoj-judger:latest
           docker push yemaster/hustoj-judger:$DATE_TAG
-    
-      - name: Log in to registry.abstrax.cn
-        if: env.NEED_BUILD == 'true' || github.event_name == 'push'
-        uses: docker/login-action@v3
-        with:
-          registry: registry.abstrax.cn
-          username: ${{ secrets.ABSTRAX_USERNAME }}
-          password: ${{ secrets.ABSTRAX_TOKEN }}
-      
-      - name: push to abstrax registry
-        if: env.NEED_BUILD == 'true' || github.event_name == 'push'
-        run: |
-          DATE_TAG=$(date +%Y%m%d)
-          echo "Tagging images with $DATE_TAG"
-
-          docker tag yemaster/hustoj-web registry.abstrax.cn/yemaster/hustoj-web:latest
-          docker tag yemaster/hustoj-web registry.abstrax.cn/yemaster/hustoj-web:$DATE_TAG
-          docker push registry.abstrax.cn/yemaster/hustoj-web:latest
-          docker push registry.abstrax.cn/yemaster/hustoj-web:$DATE_TAG
-
-          docker tag yemaster/hustoj-judger registry.abstrax.cn/yemaster/hustoj-judger:latest
-          docker tag yemaster/hustoj-judger registry.abstrax.cn/yemaster/hustoj-judger:$DATE_TAG
-          docker push registry.abstrax.cn/yemaster/hustoj-judger:latest
-          docker push registry.abstrax.cn/yemaster/hustoj-judger:$DATE_TAG
+          
